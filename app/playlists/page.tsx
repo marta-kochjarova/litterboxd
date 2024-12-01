@@ -6,7 +6,7 @@ export default function Home() {
 
   return (
     <div>
-      <Button variant="filled" style={{backgroundColor: theme.colors.custom[5]}} size="xl" radius="xl">Button</Button>
+      <h1>playlists</h1>
     </div>
   );
 }
