@@ -3,6 +3,7 @@
 import "./globals.css";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
+import classes from "./MobileNavbar.module.css";
 import { useDisclosure } from "@mantine/hooks";
 import {
   createTheme,
@@ -11,6 +12,7 @@ import {
   AppShell,
   Burger,
   Group,
+  UnstyledButton,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import Preloader from "@/components/preloader/Preloader";
@@ -24,10 +26,10 @@ const theme = createTheme({
       "#d5ccec",
       "#c9bce7", //light
       "#AA96DA", //primary-light
-      "#9e88d3", 
-      "#947cce",//primary
+      "#9e88d3",
+      "#947cce", //primary
       "#8b70cd", //darker purple
-      "#7c5fc4", 
+      "#7c5fc4",
       "#563c98",
       "#422982", //9
     ],
@@ -42,25 +44,16 @@ export default function RootLayout({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Function to check if the page has finished loading
-    const checkPageLoad = () => {
-      if (document.readyState === 'complete') {
-        setIsLoading(false);
-      }
-    };
+    const handleLoad = () => setIsLoading(false);
 
-    // Initial check if the page is already loaded
-    checkPageLoad();
-
-    // Add an event listener for when the page fully loads
-    window.addEventListener('load', checkPageLoad);
-
-    return () => {
-      // Cleanup the event listener when the component unmounts
-      window.removeEventListener('load', checkPageLoad);
-    };
+    if (document.readyState === "complete") {
+      handleLoad();
+    } else {
+      window.addEventListener("load", handleLoad);
+      return () => window.removeEventListener("load", handleLoad); //cleanup
+    }
   }, []);
-  
+
   return (
     <html lang="en">
       <head>
@@ -70,15 +63,13 @@ export default function RootLayout({
       </head>
       <body>
         <MantineProvider theme={theme}>
-        {isLoading && (
-         <Preloader />
-        )}
+          {isLoading && <Preloader />}
           <AppShell
             header={{ height: 60 }}
             navbar={{
               width: 300,
               breakpoint: "sm",
-              collapsed: { mobile: !opened },
+              collapsed: { desktop: true, mobile: !opened },
             }}
             padding="md"
           >
@@ -90,16 +81,35 @@ export default function RootLayout({
                   hiddenFrom="sm"
                   size="sm"
                 />
-                <Logo type={'primary'} width={200} />
+                <Group justify="space-between" style={{ flex: 1 }}>
+                  <Logo type={"primary"} />
+                  <Group ml="xl" gap={0} visibleFrom="sm">
+                    <UnstyledButton className={classes.control}>
+                      Home
+                    </UnstyledButton>
+                    <UnstyledButton className={classes.control}>
+                      Blog
+                    </UnstyledButton>
+                    <UnstyledButton className={classes.control}>
+                      Contacts
+                    </UnstyledButton>
+                    <UnstyledButton className={classes.control}>
+                      Support
+                    </UnstyledButton>
+                  </Group>
+                </Group>
               </Group>
             </AppShell.Header>
-            <AppShell.Navbar p="md">
-              Navbar
-              {Array(15)
-                .fill(0)
-                .map((_, index) => (
-                  <Skeleton key={index} h={28} mt="sm" animate={false} />
-                ))}
+
+            <AppShell.Navbar py="md" px={4}>
+              <UnstyledButton className={classes.control}>Home</UnstyledButton>
+              <UnstyledButton className={classes.control}>Blog</UnstyledButton>
+              <UnstyledButton className={classes.control}>
+                Contacts
+              </UnstyledButton>
+              <UnstyledButton className={classes.control}>
+                Support
+              </UnstyledButton>
             </AppShell.Navbar>
             <AppShell.Main>{children}</AppShell.Main>
           </AppShell>

@@ -1,23 +1,22 @@
 "use client";
 
-import Image from 'next/image';
-import LogoPrimary from '../../public/logo/logo-primary.png';
-import LogoWhite from '../../public/logo/logo-white.png';
-import LogoDark from '../../public/logo/logo-dark-grey.png';
+import styles from './logo.module.css';
+import Image from "next/image";
+import LogoPrimary from "../../public/logo/logo-primary.png";
+import LogoWhite from "../../public/logo/logo-white.png";
+import LogoDark from "../../public/logo/logo-dark-grey.png";
 
 interface LogoProps {
-     type: string; 
-     width?: number | "unset";
+  type: string;
 }
 
 export enum LogoType {
-     PRIMARY = "primary",
-     LIGHT = "light",
-     DARK = "dark",
+  PRIMARY = "primary",
+  LIGHT = "light",
+  DARK = "dark",
 }
 
-export default function Logo({ type, width = "unset" }: LogoProps) {
-
+export default function Logo({ type }: LogoProps) {
   let logoSrc;
   switch (type) {
     case LogoType.PRIMARY:
@@ -35,6 +34,11 @@ export default function Logo({ type, width = "unset" }: LogoProps) {
   }
 
   return (
-     <Image src={logoSrc} alt="Logo" width={width === "unset" ? undefined : width} />
+    <a href='/' className={styles.logo}>
+      <img
+        src={logoSrc.src}
+        alt="Logo"
+      />
+    </a>
   );
 }
