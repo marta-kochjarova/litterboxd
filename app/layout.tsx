@@ -8,7 +8,7 @@ import { useDisclosure } from "@mantine/hooks";
 import {
   createTheme,
   MantineProvider,
-  Skeleton,
+  Avatar,
   AppShell,
   Burger,
   Group,
@@ -37,11 +37,11 @@ const theme = createTheme({
   primaryColor: "custom",
 });
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {
   const [opened, { toggle }] = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
+
+  const dummyUsername = "Jane Doe";
 
   useEffect(() => {
     const handleLoad = () => setIsLoading(false);
@@ -65,53 +65,39 @@ export default function RootLayout({
         <MantineProvider theme={theme}>
           {isLoading && <Preloader />}
           <AppShell
-            header={{ height: 60 }}
-            navbar={{
-              width: 300,
-              breakpoint: "sm",
-              collapsed: { desktop: true, mobile: !opened },
-            }}
+            header={{ height: 100 }}
+            navbar={{ width: 300, breakpoint: "sm", collapsed: { desktop: true, mobile: !opened } }}
             padding="md"
+            className="blur-bg"
           >
-            <AppShell.Header>
-              <Group h="100%" px="md">
+            <AppShell.Header withBorder={false}>
+              <Group  h="100%" px="md" justify="space-between">
+              <Logo type={"light"}/>
                 <Burger
                   opened={opened}
                   onClick={toggle}
                   hiddenFrom="sm"
                   size="sm"
                 />
-                <Group justify="space-between" style={{ flex: 1 }}>
-                  <Logo type={"primary"} />
-                  <Group ml="xl" gap={0} visibleFrom="sm">
+                <Group ml="xl" gap={0} visibleFrom="sm">
                     <UnstyledButton className={classes.control}>
-                      Home
+                      Films
                     </UnstyledButton>
                     <UnstyledButton className={classes.control}>
-                      Blog
+                      Lists
                     </UnstyledButton>
-                    <UnstyledButton className={classes.control}>
-                      Contacts
-                    </UnstyledButton>
-                    <UnstyledButton className={classes.control}>
-                      Support
-                    </UnstyledButton>
-                  </Group>
                 </Group>
+                <Avatar key={dummyUsername} name={dummyUsername} color="initials" allowedInitialsColors={['custom']}/>
               </Group>
             </AppShell.Header>
 
             <AppShell.Navbar py="md" px={4}>
-              <UnstyledButton className={classes.control}>Home</UnstyledButton>
-              <UnstyledButton className={classes.control}>Blog</UnstyledButton>
-              <UnstyledButton className={classes.control}>
-                Contacts
-              </UnstyledButton>
-              <UnstyledButton className={classes.control}>
-                Support
-              </UnstyledButton>
+              <UnstyledButton className={classes.control}>Films</UnstyledButton>
+              <UnstyledButton className={classes.control}>Lists</UnstyledButton>
             </AppShell.Navbar>
+
             <AppShell.Main>{children}</AppShell.Main>
+
           </AppShell>
         </MantineProvider>
       </body>
